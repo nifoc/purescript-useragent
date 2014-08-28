@@ -17,9 +17,9 @@ module Web.UAParser (
   isSafari
   ) where
 
+import Data.Maybe
 import Data.Array
 import Data.String.Regex (regex, test, match)
-import Data.Maybe
 
 foreign import floor "var floor = Math.floor;" :: Number -> Number
 foreign import readFloat "var readFloat = parseFloat;" :: String -> Number
