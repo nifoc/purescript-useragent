@@ -1,0 +1,27 @@
+{
+  "name": "purescript-useragent",
+  "version": "0.0.1",
+  "description": "Detect browsers based on their user agent",
+  "keywords": [
+    "purescript"
+  ],
+  "license": "ISC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "output",
+    "tests",
+    "js",
+    "externs",
+    "tmp",
+    "bower.json",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "dependencies": {
+    "purescript-strings": "~0.2.1",
+    "purescript-arrays": "~0.2.1",
+    "purescript-maybe": "~0.2.0"
+  }
+}
