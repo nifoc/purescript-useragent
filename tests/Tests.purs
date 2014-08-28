@@ -83,6 +83,22 @@ firefox = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/2
                      }
           ]
 
+msie = [ TestCase { userAgent: "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)"
+                  , expectedResult: UserAgent { name: "Internet Explorer"
+                                              , majorVersion: 10
+                                              , version: 10
+                                              , vendor: "Microsoft"
+                                              }
+                  }
+       , TestCase { userAgent: "Mozilla/4.0 (Windows; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727)"
+                  , expectedResult: UserAgent { name: "Internet Explorer"
+                                              , majorVersion: 6
+                                              , version: 6
+                                              , vendor: "Microsoft"
+                                              }
+                  }
+       ]
+
 safari = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
                     , expectedResult: UserAgent { name: "Safari"
                                                 , majorVersion: 5
@@ -147,6 +163,9 @@ main = do
 
   trace "Detects Firefox"
   print $ runTestCases firefox
+
+  trace "Detects Internet Explorer"
+  print $ runTestCases msie
 
   trace "Detects Safari"
   print $ runTestCases safari

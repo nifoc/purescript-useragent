@@ -13,6 +13,7 @@ module Web.UAParser (
   parse,
   isChrome,
   isFirefox,
+  isMSIE,
   isSafari
   ) where
 
@@ -42,6 +43,8 @@ isChrome ua = regexTest "\\sChrome/\\d+" ua
 
 isFirefox ua = regexTest "\\sGecko/\\d+\\s?.+\\sFirefox/\\d+" ua
 
+isMSIE ua = regexTest ";\\sMSIE\\s[\\d|\\.]+;" ua
+
 isSafari ua = isNew || isOld
   where
   isNew = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+\\sVersion/[\\d|\\.]+\\sSafari/\\d+" ua
@@ -62,6 +65,12 @@ parse ua | isFirefox ua = let version = extractVersionNumber <<< regexMatch "Fir
                                                , version: version
                                                , vendor: "Mozilla"
                                                }
+parse ua | isMSIE ua    = let version = extractVersionNumber <<< regexMatch "MSIE ([\\d|\\.]+);" $ ua
+                          in  Just $ UserAgent { name: "Internet Explorer"
+                                               , majorVersion: floor version
+                                               , version: version
+                                               , vendor: "Microsoft"
+                                               }
 parse ua | isSafari ua  = let version = if regexTest "Version/\\d+" ua
                                         then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
                                         else webkitToSafariVersion <<< regexMatch "Safari/(\\d+)" $ ua
@@ -74,13 +83,13 @@ parse ua | isSafari ua  = let version = if regexTest "Version/\\d+" ua
                                                                 312 -> 1.3
                                                                 125 -> 1.2
                                                                 124 -> 1.2
-                                                                85 -> 1
+                                                                85  -> 1
                                                                 _   -> 0
-                          in Just $ UserAgent { name: "Safari"
-                                              , majorVersion: floor version
-                                              , version: version
-                                              , vendor: "Apple"
-                                              }
+                          in  Just $ UserAgent { name: "Safari"
+                                               , majorVersion: floor version
+                                               , version: version
+                                               , vendor: "Apple"
+                                               }
 parse _                 = Nothing
 
 {- Helper -}
