@@ -75,16 +75,16 @@ parse ua | isSafari ua  = let version = if regexTest "Version/\\d+" ua
                                         then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
                                         else webkitToSafariVersion <<< regexMatch "Safari/(\\d+)" $ ua
                               webkitToSafariVersion matches = case readFloat <<< fromMaybe "0" $ matches !! 1 of
-                                                                419 -> 2
-                                                                418 -> 2
-                                                                417 -> 2
-                                                                416 -> 2
-                                                                412 -> 2
-                                                                312 -> 1.3
-                                                                125 -> 1.2
-                                                                124 -> 1.2
-                                                                85  -> 1
-                                                                _   -> 0
+                                                                   419 -> 2
+                                                                   418 -> 2
+                                                                   417 -> 2
+                                                                   416 -> 2
+                                                                   412 -> 2
+                                                                   312 -> 1.3
+                                                                   125 -> 1.2
+                                                                   124 -> 1.2
+                                                                   85  -> 1
+                                                                   _   -> 0
                           in  Just $ UserAgent { name: "Safari"
                                                , majorVersion: floor version
                                                , version: version
