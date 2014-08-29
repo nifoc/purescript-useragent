@@ -100,6 +100,43 @@ msie = [ TestCase { userAgent: "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6
                   }
        ]
 
+opera = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 1094) AppleWebKit/537.36 (KHTML like Gecko) Chrome/35.0.1916.153 Safari/537.36 OPR/22.0.1471.70"
+                   , expectedResult: UserAgent { name: "Opera"
+                                               , majorVersion: 22
+                                               , version: 22
+                                               , vendor: "Opera"
+                                               }
+                   }
+        , TestCase { userAgent: "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.52 Safari/537.36 OPR/15.0.1147.100"
+                   , expectedResult: UserAgent { name: "Opera"
+                                               , majorVersion: 15
+                                               , version: 15
+                                               , vendor: "Opera"
+                                               }
+                   }
+        , TestCase { userAgent: "Opera/9.80 (Windows NT 6.0) Presto/2.12.388 Version/12.14"
+                   , expectedResult: UserAgent { name: "Opera"
+                                               , majorVersion: 12
+                                               , version: 12.14
+                                               , vendor: "Opera"
+                                               }
+                   }
+        , TestCase { userAgent: "Opera/9.62 (X11; Linux x86_64; U; ru) Presto/2.1.1"
+                   , expectedResult: UserAgent { name: "Opera"
+                                               , majorVersion: 9
+                                               , version: 9.62
+                                               , vendor: "Opera"
+                                               }
+                   }
+        , TestCase { userAgent: "Mozilla/4.0 (compatible; MSIE 6.0; Windows 98; en) Opera 8.52"
+                   , expectedResult: UserAgent { name: "Opera"
+                                               , majorVersion: 8
+                                               , version: 8.52
+                                               , vendor: "Opera"
+                                               }
+                   }
+        ]
+
 safari = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
                     , expectedResult: UserAgent { name: "Safari"
                                                 , majorVersion: 5
@@ -154,7 +191,7 @@ eq :: forall a. (Eq a, Show a) => a -> a -> String
 eq a b = if a == b then "OK" else "ERROR " ++ show a ++ " does not equal " ++ show b
 
 runTestCases :: [TestCase] -> [String]
-runTestCases tc = map (\(TestCase t) -> eq t.expectedResult <<< fromMaybe failingUA <<< parse $ t.userAgent) tc
+runTestCases = map (\(TestCase t) -> eq t.expectedResult <<< fromMaybe failingUA <<< parse $ t.userAgent)
 
 {- Runner -}
 
@@ -167,6 +204,9 @@ main = do
 
   trace "Detects Internet Explorer"
   print $ runTestCases msie
+
+  trace "Detects Opera"
+  print $ runTestCases opera
 
   trace "Detects Safari"
   print $ runTestCases safari
