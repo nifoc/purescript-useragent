@@ -13,7 +13,6 @@ module Main where
 import Data.Maybe
 import Data.Array
 import Control.Monad.Eff
-import Control.Monad.Eff.Exception
 import Debug.Trace
 
 import Web.UAParser
