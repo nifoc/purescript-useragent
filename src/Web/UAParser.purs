@@ -20,7 +20,7 @@ module Web.UAParser (
 
 import Data.Maybe
 import Data.Array
-import Data.String.Regex (regex, test, match)
+import qualified Data.String.Regex as RE
 
 foreign import floor "var floor = Math.floor;" :: Number -> Number
 foreign import readFloat "var readFloat = parseFloat;" :: String -> Number
@@ -38,6 +38,12 @@ instance eqUserAgent :: Eq UserAgent where
   (==) (UserAgent a) (UserAgent b) = a.name == b.name && a.version == b.version && a.vendor == b.vendor
   (/=) a b = not (a == b)
 
+mkUserAgent name version vendor = UserAgent { name: name
+                                            , majorVersion: floor version
+                                            , version: version
+                                            , vendor: vendor
+                                            }
+
 {- Detectors -}
 
 isChrome ua = regexTest "\\sChrome/\\d+" ua && not (isOpera ua)
@@ -46,52 +52,23 @@ isFirefox = regexTest "\\sGecko/\\d+\\s?.+\\sFirefox/\\d+"
 
 isMSIE ua = regexTest ";\\sMSIE\\s[\\d|\\.]+;" ua && not (isOpera ua)
 
-isOpera ua = isPreV15 || isPostV15
-  where
-  isPreV15 = regexTest "Opera[\\s|/]\\d+" ua
-  isPostV15 = regexTest "OPR/\\d+" ua
+isOpera = regexTest' "Ope?ra?[\\s|/]\\d+" "i"
 
-isSafari ua = (isPreV3 || isPostV3) && not (isOpera ua)
-  where
-  isPreV3  = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+\\sVersion/[\\d|\\.]+\\sSafari/\\d+" ua
-  isPostV3 = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s\\(KHTML,\\slike Gecko\\)\\sSafari/[\\d|\\.]+" ua
+isSafari ua = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+\\sSafari/[\\d|\\.]+" ua && not (isOpera ua)
 
 {- API -}
 
 parse :: String -> Maybe UserAgent
 parse ua | isChrome ua  = let version = extractVersionNumber <<< regexMatch "Chrome/([\\d|\\.]+)" $ ua
-                          in  Just $ UserAgent { name: "Chrome"
-                                               , majorVersion: floor version
-                                               , version: version
-                                               , vendor: "Google"
-                                               }
+                          in  Just $ mkUserAgent "Chrome" version "Google"
 parse ua | isFirefox ua = let version = extractVersionNumber <<< regexMatch "Firefox/([\\d|\\.]+)" $ ua
-                          in  Just $ UserAgent { name: "Firefox"
-                                               , majorVersion: floor version
-                                               , version: version
-                                               , vendor: "Mozilla"
-                                               }
+                          in  Just $ mkUserAgent "Firefox" version "Mozilla"
 parse ua | isMSIE ua    = let version = extractVersionNumber <<< regexMatch "MSIE ([\\d|\\.]+);" $ ua
-                          in  Just $ UserAgent { name: "Internet Explorer"
-                                               , majorVersion: floor version
-                                               , version: version
-                                               , vendor: "Microsoft"
-                                               }
+                          in  Just $ mkUserAgent "Internet Explorer" version "Microsoft"
 parse ua | isOpera ua   = let version = if regexTest "Version/\\d+" ua
                                         then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
-                                        else extractVersionNumber <<< oprRegexMatch "Ope?ra?[\\s|/]([\\d|\\.]+)" $ ua
-                              oprRegexMatch expr = match (buildOprRegex expr)
-                              buildOprRegex expr = regex expr { global: false
-                                                              , ignoreCase: true
-                                                              , multiline: false
-                                                              , sticky: false
-                                                              , unicode: false
-                                                              }
-                          in  Just $ UserAgent { name: "Opera"
-                                               , majorVersion: floor version
-                                               , version: version
-                                               , vendor: "Opera"
-                                               }
+                                        else extractVersionNumber $ regexMatch' "Ope?ra?[\\s|/]([\\d|\\.]+)" "i" ua
+                          in  Just $ mkUserAgent "Opera" version "Opera"
 parse ua | isSafari ua  = let version = if regexTest "Version/\\d+" ua
                                         then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
                                         else webkitToSafariVersion <<< regexMatch "Safari/(\\d+)" $ ua
@@ -106,24 +83,17 @@ parse ua | isSafari ua  = let version = if regexTest "Version/\\d+" ua
                                                                    124 -> 1.2
                                                                    85  -> 1
                                                                    _   -> 0
-                          in  Just $ UserAgent { name: "Safari"
-                                               , majorVersion: floor version
-                                               , version: version
-                                               , vendor: "Apple"
-                                               }
+                          in  Just $ mkUserAgent "Safari" version "Apple"
 parse _                 = Nothing
 
 {- Helper -}
 
-buildRegex expr = regex expr { global: false
-                             , ignoreCase: false
-                             , multiline: false
-                             , sticky: false
-                             , unicode: false
-                             }
+regexTest expr = regexTest' expr ""
 
-regexTest expr = test (buildRegex expr)
+regexTest' expr flags = RE.test $ RE.regex expr (RE.parseFlags flags)
 
-regexMatch expr = match (buildRegex expr)
+regexMatch expr = regexMatch' expr ""
+
+regexMatch' expr flags = RE.match $ RE.regex expr (RE.parseFlags flags)
 
 extractVersionNumber matches = readFloat <<< fromMaybe "0" $ matches !! 1
