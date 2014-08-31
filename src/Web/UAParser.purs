@@ -13,8 +13,10 @@ module Web.UAParser (
   parse,
   isChrome,
   isFirefox,
+  isMobileSafari,
   isMSIE,
   isOpera,
+  isOperaMini,
   isSafari
   ) where
 
@@ -50,41 +52,52 @@ isChrome ua = regexTest "\\sChrome/\\d+" ua && not (isOpera ua)
 
 isFirefox = regexTest "\\sGecko/\\d+\\s?.+\\sFirefox/\\d+"
 
+isMobileSafari = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+Version/[\\d|\\.]+\\sMobile/\\w+\\sSafari/[\\d|\\.]+"
+
 isMSIE ua = regexTest ";\\sMSIE\\s[\\d|\\.]+;" ua && not (isOpera ua)
 
-isOpera = regexTest' "Ope?ra?[\\s|/]\\d+" "i"
+isOpera ua = regexTest' "Ope?ra?[\\s|/]\\d+" "i" ua && not (isOperaMini ua)
 
-isSafari ua = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+\\sSafari/[\\d|\\.]+" ua && not (isOpera ua)
+isOperaMini = regexTest "Opera\\sMini/\\d+"
+
+isSafari ua = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+\\sSafari/[\\d|\\.]+" ua &&
+              not (isChrome ua) &&
+              not (isMobileSafari ua) &&
+              not (isOpera ua)
 
 {- API -}
 
 parse :: String -> Maybe UserAgent
-parse ua | isChrome ua  = let version = extractVersionNumber <<< regexMatch "Chrome/([\\d|\\.]+)" $ ua
-                          in  Just $ mkUserAgent "Chrome" version "Google"
-parse ua | isFirefox ua = let version = extractVersionNumber <<< regexMatch "Firefox/([\\d|\\.]+)" $ ua
-                          in  Just $ mkUserAgent "Firefox" version "Mozilla"
-parse ua | isMSIE ua    = let version = extractVersionNumber <<< regexMatch "MSIE ([\\d|\\.]+);" $ ua
-                          in  Just $ mkUserAgent "Internet Explorer" version "Microsoft"
-parse ua | isOpera ua   = let version = if regexTest "Version/\\d+" ua
-                                        then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
-                                        else extractVersionNumber $ regexMatch' "Ope?ra?[\\s|/]([\\d|\\.]+)" "i" ua
-                          in  Just $ mkUserAgent "Opera" version "Opera"
-parse ua | isSafari ua  = let version = if regexTest "Version/\\d+" ua
-                                        then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
-                                        else webkitToSafariVersion <<< regexMatch "Safari/(\\d+)" $ ua
-                              webkitToSafariVersion matches = case readFloat <<< fromMaybe "0" $ matches !! 1 of
-                                                                   419 -> 2
-                                                                   418 -> 2
-                                                                   417 -> 2
-                                                                   416 -> 2
-                                                                   412 -> 2
-                                                                   312 -> 1.3
-                                                                   125 -> 1.2
-                                                                   124 -> 1.2
-                                                                   85  -> 1
-                                                                   _   -> 0
-                          in  Just $ mkUserAgent "Safari" version "Apple"
-parse _                 = Nothing
+parse ua | isChrome ua       = let version = extractVersionNumber <<< regexMatch "Chrome/([\\d|\\.]+)" $ ua
+                               in  Just $ mkUserAgent "Chrome" version "Google"
+parse ua | isFirefox ua      = let version = extractVersionNumber <<< regexMatch "Firefox/([\\d|\\.]+)" $ ua
+                               in  Just $ mkUserAgent "Firefox" version "Mozilla"
+parse ua | isMobileSafari ua = let version = extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
+                               in  Just $ mkUserAgent "Mobile Safari" version "Apple"
+parse ua | isMSIE ua         = let version = extractVersionNumber <<< regexMatch "MSIE ([\\d|\\.]+);" $ ua
+                               in  Just $ mkUserAgent "Internet Explorer" version "Microsoft"
+parse ua | isOpera ua        = let version = if regexTest "Version/\\d+" ua
+                                             then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
+                                             else extractVersionNumber $ regexMatch' "Ope?ra?[\\s|/]([\\d|\\.]+)" "i" ua
+                               in  Just $ mkUserAgent "Opera" version "Opera"
+parse ua | isOperaMini ua    = let version = extractVersionNumber <<< regexMatch "Opera\\sMini/([\\d|\\.]+)" $ ua
+                               in  Just $ mkUserAgent "Opera Mini" version "Opera"
+parse ua | isSafari ua       = let version = if regexTest "Version/\\d+" ua
+                                             then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
+                                             else webkitToSafariVersion <<< regexMatch "Safari/(\\d+)" $ ua
+                                   webkitToSafariVersion matches = case readFloat <<< fromMaybe "0" $ matches !! 1 of
+                                                                        419 -> 2
+                                                                        418 -> 2
+                                                                        417 -> 2
+                                                                        416 -> 2
+                                                                        412 -> 2
+                                                                        312 -> 1.3
+                                                                        125 -> 1.2
+                                                                        124 -> 1.2
+                                                                        85  -> 1
+                                                                        _   -> 0
+                               in  Just $ mkUserAgent "Safari" version "Apple"
+parse _                      = Nothing
 
 {- Helper -}
 

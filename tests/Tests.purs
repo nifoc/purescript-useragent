@@ -83,6 +83,29 @@ firefox = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/2
                      }
           ]
 
+mobileSafari = [ TestCase { userAgent: "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25"
+                          , expectedResult: UserAgent { name: "Mobile Safari"
+                                                      , majorVersion: 6
+                                                      , version: 6
+                                                      , vendor: "Apple"
+                                                      }
+                          }
+               , TestCase { userAgent: "Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_3_3 like Mac OS X; en-us) AppleWebKit/533.17.9 (KHTML, like Gecko) Version/5.0.2 Mobile/8J2 Safari/6533.18.5"
+                          , expectedResult: UserAgent { name: "Mobile Safari"
+                                                      , majorVersion: 5
+                                                      , version: 5
+                                                      , vendor: "Apple"
+                                                      }
+                          }
+               , TestCase { userAgent: "Mozilla/5.0 (iPod; U; CPU like Mac OS X; en) AppleWebKit/420.1 (KHTML, like Gecko) Version/3.0 Mobile/4A93 Safari/419.3"
+                          , expectedResult: UserAgent { name: "Mobile Safari"
+                                                      , majorVersion: 3
+                                                      , version: 3
+                                                      , vendor: "Apple"
+                                                      }
+                          }
+               ]
+
 msie = [ TestCase { userAgent: "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)"
                   , expectedResult: UserAgent { name: "Internet Explorer"
                                               , majorVersion: 10
@@ -135,6 +158,22 @@ opera = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 1094) Ap
                                                }
                    }
         ]
+
+operaMini = [ TestCase { userAgent: "Opera/9.80 (iPhone; Opera Mini/8.0.0/34.2336; U; en) Presto/2.8.119 Version/11.104"
+                       , expectedResult: UserAgent { name: "Opera Mini"
+                                                   , majorVersion: 8
+                                                   , version: 8
+                                                   , vendor: "Opera"
+                                                   }
+                       }
+            , TestCase { userAgent: "Opera/9.80 (Android; Opera Mini/7.5.33361/31.1350; U; en) Presto/2.8.119 Version/11.10"
+                       , expectedResult: UserAgent { name: "Opera Mini"
+                                                   , majorVersion: 7
+                                                   , version: 7.5
+                                                   , vendor: "Opera"
+                                                   }
+                       }
+            ]
 
 safari = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2"
                     , expectedResult: UserAgent { name: "Safari"
@@ -201,11 +240,17 @@ main = do
   trace "Detects Firefox"
   print $ runTestCases firefox
 
+  trace "Detects Mobile Safari"
+  print $ runTestCases mobileSafari
+
   trace "Detects Internet Explorer"
   print $ runTestCases msie
 
   trace "Detects Opera"
   print $ runTestCases opera
+
+  trace "Detects Opera Mini"
+  print $ runTestCases operaMini
 
   trace "Detects Safari"
   print $ runTestCases safari
