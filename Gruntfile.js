@@ -34,6 +34,13 @@ module.exports = function(grunt) {
       tests: {
         src: "tmp/tests.js"
       }
+    },
+
+    docgen: {
+      types: {
+        src: "src/**/*.purs",
+        dest: "TYPES.md"
+      }
     }
   });
 
@@ -42,6 +49,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-execute");
 
   grunt.registerTask("test", ["clean:tests", "psc:tests", "execute:tests"]);
+  grunt.registerTask("doc", ["docgen:types"]);
   grunt.registerTask("make", ["pscMake", "dotPsci"]);
   grunt.registerTask("default", ["make"]);
 };

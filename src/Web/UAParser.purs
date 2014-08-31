@@ -48,18 +48,25 @@ mkUserAgent name version vendor = UserAgent { name: name
 
 {- Detectors -}
 
+isChrome :: String -> Boolean
 isChrome ua = regexTest "\\sChrome/\\d+" ua && not (isOpera ua)
 
+isFirefox :: String -> Boolean
 isFirefox = regexTest "\\sGecko/\\d+\\s?.+\\sFirefox/\\d+"
 
+isMobileSafari :: String -> Boolean
 isMobileSafari = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+Version/[\\d|\\.]+\\sMobile/\\w+\\sSafari/[\\d|\\.]+"
 
+isMSIE :: String -> Boolean
 isMSIE ua = regexTest ";\\sMSIE\\s[\\d|\\.]+;" ua && not (isOpera ua)
 
+isOpera :: String -> Boolean
 isOpera ua = regexTest' "Ope?ra?[\\s|/]\\d+" "i" ua && not (isOperaMini ua)
 
+isOperaMini :: String -> Boolean
 isOperaMini = regexTest "Opera\\sMini/\\d+"
 
+isSafari :: String -> Boolean
 isSafari ua = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+\\sSafari/[\\d|\\.]+" ua &&
               not (isChrome ua) &&
               not (isMobileSafari ua) &&

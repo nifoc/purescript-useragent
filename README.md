@@ -8,6 +8,10 @@ Detect browsers based on their user agent.
 
 This is pre-alpha software. I'm just playing around with PureScript.
 
+## API
+
+The types of the exported functions can be found in [TYPES.md](https://github.com/nifoc/purescript-useragent/blob/master/TYPES.md).
+
 ## License
 
 [ISC](https://en.wikipedia.org/wiki/ISC_license).
