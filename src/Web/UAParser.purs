@@ -21,7 +21,12 @@ module Web.UAParser (
   isMSIE,
   isOpera,
   isOperaMini,
-  isSafari
+  isSafari,
+  isAndroid,
+  isIOS,
+  isLinux,
+  isMacOSX,
+  isWindows
   ) where
 
 import Data.Maybe
@@ -34,6 +39,7 @@ foreign import readFloat "var readFloat = parseFloat;" :: String -> Number
 data UserAgent = UserAgent { name :: String
                            , majorVersion :: Number
                            , version :: Number
+                           , platform :: String
                            , vendor :: String
                            }
 
@@ -41,17 +47,20 @@ instance showUserAgent :: Show UserAgent where
   show (UserAgent u) = u.name ++ " " ++ show u.majorVersion ++ " (" ++ u.vendor ++ ")"
 
 instance eqUserAgent :: Eq UserAgent where
-  (==) (UserAgent a) (UserAgent b) = a.name == b.name && a.version == b.version && a.vendor == b.vendor
+  (==) (UserAgent a) (UserAgent b) = a.name == b.name && a.version == b.version &&
+                                     a.platform == b.platform && a.vendor == b.vendor
   (/=) a b = not (a == b)
 
-mkUserAgent name version vendor = UserAgent { name: name
+mkUserAgent name version platform vendor = UserAgent { name: name
                                             , majorVersion: floor version
                                             , version: version
+                                            , platform: platform
                                             , vendor: vendor
                                             }
 
 {- Detectors -}
 
+-- Browsers
 isChrome :: String -> Boolean
 isChrome ua = regexTest "\\sChrome/\\d+" ua && not (isOpera ua)
 
@@ -76,23 +85,45 @@ isSafari ua = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+\\sSafari/[\\d|\\.]+" ua
               not (isMobileSafari ua) &&
               not (isOpera ua)
 
+-- Platforms
+isAndroid :: String -> Boolean
+isAndroid = regexTest "Android[\\s|;]"
+
+isIOS :: String -> Boolean
+isIOS ua = regexTest "\\(iPhone" ua || regexTest "\\(iPad" ua || regexTest "\\(iPod" ua
+
+isLinux :: String -> Boolean
+isLinux ua = regexTest "Linux" ua && not (isAndroid ua)
+
+isMacOSX :: String -> Boolean
+isMacOSX = regexTest "Mac\\sOS\\sX"
+
+isWindows :: String -> Boolean
+isWindows = regexTest "Windows"
+
 {- API -}
 
 parse :: String -> Maybe UserAgent
 parse ua | isChrome ua       = let version = extractVersionNumber <<< regexMatch "Chrome/([\\d|\\.]+)" $ ua
-                               in  Just $ mkUserAgent "Chrome" version "Google"
+                                   platform = extractPlatform ua
+                               in  Just $ mkUserAgent "Chrome" version platform "Google"
 parse ua | isFirefox ua      = let version = extractVersionNumber <<< regexMatch "Firefox/([\\d|\\.]+)" $ ua
-                               in  Just $ mkUserAgent "Firefox" version "Mozilla"
+                                   platform = extractPlatform ua
+                               in  Just $ mkUserAgent "Firefox" version platform "Mozilla"
 parse ua | isMobileSafari ua = let version = extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
-                               in  Just $ mkUserAgent "Mobile Safari" version "Apple"
+                                   platform = extractPlatform ua
+                               in  Just $ mkUserAgent "Mobile Safari" version platform "Apple"
 parse ua | isMSIE ua         = let version = extractVersionNumber <<< regexMatch "MSIE ([\\d|\\.]+);" $ ua
-                               in  Just $ mkUserAgent "Internet Explorer" version "Microsoft"
+                                   platform = extractPlatform ua
+                               in  Just $ mkUserAgent "Internet Explorer" version platform "Microsoft"
 parse ua | isOpera ua        = let version = if regexTest "Version/\\d+" ua
                                              then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
                                              else extractVersionNumber $ regexMatch' "Ope?ra?[\\s|/]([\\d|\\.]+)" "i" ua
-                               in  Just $ mkUserAgent "Opera" version "Opera"
+                                   platform = extractPlatform ua
+                               in  Just $ mkUserAgent "Opera" version platform "Opera"
 parse ua | isOperaMini ua    = let version = extractVersionNumber <<< regexMatch "Opera\\sMini/([\\d|\\.]+)" $ ua
-                               in  Just $ mkUserAgent "Opera Mini" version "Opera"
+                                   platform = extractPlatform ua
+                               in  Just $ mkUserAgent "Opera Mini" version platform "Opera"
 parse ua | isSafari ua       = let version = if regexTest "Version/\\d+" ua
                                              then extractVersionNumber <<< regexMatch "Version/([\\d|\\.]+)" $ ua
                                              else webkitToSafariVersion <<< regexMatch "Safari/(\\d+)" $ ua
@@ -107,7 +138,8 @@ parse ua | isSafari ua       = let version = if regexTest "Version/\\d+" ua
                                                                         124 -> 1.2
                                                                         85  -> 1
                                                                         _   -> 0
-                               in  Just $ mkUserAgent "Safari" version "Apple"
+                                   platform = extractPlatform ua
+                               in  Just $ mkUserAgent "Safari" version platform "Apple"
 parse _                      = Nothing
 
 name :: String -> Maybe String
@@ -137,3 +169,10 @@ regexMatch expr = regexMatch' expr ""
 regexMatch' expr flags = RE.match $ RE.regex expr (RE.parseFlags flags)
 
 extractVersionNumber matches = readFloat <<< fromMaybe "0" $ matches !! 1
+
+extractPlatform ua | isAndroid ua = "Android"
+extractPlatform ua | isIOS ua     = "iOS"
+extractPlatform ua | isLinux ua   = "Linux"
+extractPlatform ua | isMacOSX ua  = "Mac OS X"
+extractPlatform ua | isWindows ua = "Windows"
+extractPlatform _                 = "Unknown"

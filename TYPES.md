@@ -5,7 +5,7 @@
 ### Types
 
     data UserAgent where
-      UserAgent :: { vendor :: String, version :: Number, majorVersion :: Number, name :: String } -> UserAgent
+      UserAgent :: { vendor :: String, platform :: String, version :: Number, majorVersion :: Number, name :: String } -> UserAgent
 
 
 ### Type Class Instances
@@ -17,11 +17,19 @@
 
 ### Values
 
+    isAndroid :: String -> Boolean
+
     isChrome :: String -> Boolean
 
     isFirefox :: String -> Boolean
 
+    isIOS :: String -> Boolean
+
+    isLinux :: String -> Boolean
+
     isMSIE :: String -> Boolean
+
+    isMacOSX :: String -> Boolean
 
     isMobileSafari :: String -> Boolean
 
@@ -30,6 +38,8 @@
     isOperaMini :: String -> Boolean
 
     isSafari :: String -> Boolean
+
+    isWindows :: String -> Boolean
 
     majorVersion :: String -> Maybe Number
 

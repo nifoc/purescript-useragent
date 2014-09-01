@@ -27,6 +27,7 @@ chrome = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 6.3; Win64; x64) Apple
                     , expectedResult: UserAgent { name: "Chrome"
                                                 , majorVersion: 37
                                                 , version: 37
+                                                , platform: "Windows"
                                                 , vendor: "Google"
                                                 }
                     }
@@ -34,6 +35,7 @@ chrome = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 6.3; Win64; x64) Apple
                     , expectedResult: UserAgent { name: "Chrome"
                                                 , majorVersion: 19
                                                 , version: 19
+                                                , platform: "Linux"
                                                 , vendor: "Google"
                                                 }
                     }
@@ -41,6 +43,7 @@ chrome = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 6.3; Win64; x64) Apple
                     , expectedResult: UserAgent { name: "Chrome"
                                                 , majorVersion: 18
                                                 , version: 18.6
+                                                , platform: "Mac OS X"
                                                 , vendor: "Google"
                                                 }
                     }
@@ -48,6 +51,7 @@ chrome = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 6.3; Win64; x64) Apple
                     , expectedResult: UserAgent { name: "Chrome"
                                                 , majorVersion: 1
                                                 , version: 1
+                                                , platform: "Windows"
                                                 , vendor: "Google"
                                                 }
                     }
@@ -57,6 +61,7 @@ firefox = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/2
                      , expectedResult: UserAgent { name: "Firefox"
                                                  , majorVersion: 31
                                                  , version: 31
+                                                 , platform: "Windows"
                                                  , vendor: "Mozilla"
                                                  }
                      }
@@ -64,6 +69,7 @@ firefox = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/2
                      , expectedResult: UserAgent { name: "Firefox"
                                                  , majorVersion: 11
                                                  , version: 11
+                                                 , platform: "Linux"
                                                  , vendor: "Mozilla"
                                                  }
                      }
@@ -71,6 +77,7 @@ firefox = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/2
                      , expectedResult: UserAgent { name: "Firefox"
                                                  , majorVersion: 3
                                                  , version: 3.6
+                                                 , platform: "Linux"
                                                  , vendor: "Mozilla"
                                                  }
                      }
@@ -78,6 +85,7 @@ firefox = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/2
                      , expectedResult: UserAgent { name: "Firefox"
                                                  , majorVersion: 1
                                                  , version: 1.5
+                                                 , platform: "Linux"
                                                  , vendor: "Mozilla"
                                                  }
                      }
@@ -87,6 +95,7 @@ mobileSafari = [ TestCase { userAgent: "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac O
                           , expectedResult: UserAgent { name: "Mobile Safari"
                                                       , majorVersion: 6
                                                       , version: 6
+                                                      , platform: "iOS"
                                                       , vendor: "Apple"
                                                       }
                           }
@@ -94,6 +103,7 @@ mobileSafari = [ TestCase { userAgent: "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac O
                           , expectedResult: UserAgent { name: "Mobile Safari"
                                                       , majorVersion: 5
                                                       , version: 5
+                                                      , platform: "iOS"
                                                       , vendor: "Apple"
                                                       }
                           }
@@ -101,6 +111,7 @@ mobileSafari = [ TestCase { userAgent: "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac O
                           , expectedResult: UserAgent { name: "Mobile Safari"
                                                       , majorVersion: 3
                                                       , version: 3
+                                                      , platform: "iOS"
                                                       , vendor: "Apple"
                                                       }
                           }
@@ -110,6 +121,7 @@ msie = [ TestCase { userAgent: "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6
                   , expectedResult: UserAgent { name: "Internet Explorer"
                                               , majorVersion: 10
                                               , version: 10
+                                              , platform: "Windows"
                                               , vendor: "Microsoft"
                                               }
                   }
@@ -117,6 +129,7 @@ msie = [ TestCase { userAgent: "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6
                   , expectedResult: UserAgent { name: "Internet Explorer"
                                               , majorVersion: 6
                                               , version: 6
+                                              , platform: "Windows"
                                               , vendor: "Microsoft"
                                               }
                   }
@@ -126,6 +139,7 @@ opera = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 1094) Ap
                    , expectedResult: UserAgent { name: "Opera"
                                                , majorVersion: 22
                                                , version: 22
+                                               , platform: "Mac OS X"
                                                , vendor: "Opera"
                                                }
                    }
@@ -133,6 +147,7 @@ opera = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 1094) Ap
                    , expectedResult: UserAgent { name: "Opera"
                                                , majorVersion: 15
                                                , version: 15
+                                               , platform: "Windows"
                                                , vendor: "Opera"
                                                }
                    }
@@ -140,6 +155,7 @@ opera = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 1094) Ap
                    , expectedResult: UserAgent { name: "Opera"
                                                , majorVersion: 12
                                                , version: 12.14
+                                               , platform: "Windows"
                                                , vendor: "Opera"
                                                }
                    }
@@ -147,6 +163,7 @@ opera = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 1094) Ap
                    , expectedResult: UserAgent { name: "Opera"
                                                , majorVersion: 9
                                                , version: 9.62
+                                               , platform: "Linux"
                                                , vendor: "Opera"
                                                }
                    }
@@ -154,6 +171,7 @@ opera = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 1094) Ap
                    , expectedResult: UserAgent { name: "Opera"
                                                , majorVersion: 8
                                                , version: 8.52
+                                               , platform: "Windows"
                                                , vendor: "Opera"
                                                }
                    }
@@ -163,6 +181,7 @@ operaMini = [ TestCase { userAgent: "Opera/9.80 (iPhone; Opera Mini/8.0.0/34.233
                        , expectedResult: UserAgent { name: "Opera Mini"
                                                    , majorVersion: 8
                                                    , version: 8
+                                                   , platform: "iOS"
                                                    , vendor: "Opera"
                                                    }
                        }
@@ -170,6 +189,7 @@ operaMini = [ TestCase { userAgent: "Opera/9.80 (iPhone; Opera Mini/8.0.0/34.233
                        , expectedResult: UserAgent { name: "Opera Mini"
                                                    , majorVersion: 7
                                                    , version: 7.5
+                                                   , platform: "Android"
                                                    , vendor: "Opera"
                                                    }
                        }
@@ -179,6 +199,7 @@ safari = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8)
                     , expectedResult: UserAgent { name: "Safari"
                                                 , majorVersion: 5
                                                 , version: 5.1
+                                                , platform: "Mac OS X"
                                                 , vendor: "Apple"
                                                 }
                     }
@@ -186,6 +207,7 @@ safari = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8)
                     , expectedResult: UserAgent { name: "Safari"
                                                 , majorVersion: 5
                                                 , version: 5
+                                                , platform: "Windows"
                                                 , vendor: "Apple"
                                                 }
                     }
@@ -193,6 +215,7 @@ safari = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8)
                     , expectedResult: UserAgent { name: "Safari"
                                                 , majorVersion: 4
                                                 , version: 4
+                                                , platform: "Windows"
                                                 , vendor: "Apple"
                                                 }
                     }
@@ -200,6 +223,7 @@ safari = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8)
                     , expectedResult: UserAgent { name: "Safari"
                                                 , majorVersion: 2
                                                 , version: 2
+                                                , platform: "Mac OS X"
                                                 , vendor: "Apple"
                                                 }
                     }
@@ -207,6 +231,7 @@ safari = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8)
                     , expectedResult: UserAgent { name: "Safari"
                                                 , majorVersion: 1
                                                 , version: 1.2
+                                                , platform: "Mac OS X"
                                                 , vendor: "Apple"
                                                 }
                     }
@@ -222,6 +247,7 @@ none = [ TestCase { userAgent: "NotABrowser/11.11"
 failingUA = UserAgent { name: "None"
                       , majorVersion: 0
                       , version: 0
+                      , platform: "Unknown"
                       , vendor: "None"
                       }
 
