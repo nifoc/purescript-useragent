@@ -52,11 +52,11 @@ instance eqUserAgent :: Eq UserAgent where
   (/=) a b = not (a == b)
 
 mkUserAgent name version platform vendor = UserAgent { name: name
-                                            , majorVersion: floor version
-                                            , version: version
-                                            , platform: platform
-                                            , vendor: vendor
-                                            }
+                                                     , majorVersion: floor version
+                                                     , version: version
+                                                     , platform: platform
+                                                     , vendor: vendor
+                                                     }
 
 {- Detectors -}
 
