@@ -31,4 +31,12 @@
 
     isSafari :: String -> Boolean
 
+    majorVersion :: String -> Maybe Number
+
+    name :: String -> Maybe String
+
     parse :: String -> Maybe UserAgent
+
+    vendor :: String -> Maybe String
+
+    version :: String -> Maybe Number
