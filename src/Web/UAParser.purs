@@ -11,6 +11,10 @@
 module Web.UAParser (
   UserAgent(..),
   parse,
+  name,
+  majorVersion,
+  version,
+  vendor,
   isChrome,
   isFirefox,
   isMobileSafari,
@@ -105,6 +109,22 @@ parse ua | isSafari ua       = let version = if regexTest "Version/\\d+" ua
                                                                         _   -> 0
                                in  Just $ mkUserAgent "Safari" version "Apple"
 parse _                      = Nothing
+
+name :: String -> Maybe String
+name ua = do (UserAgent agent) <- parse ua
+             return agent.name
+
+majorVersion :: String -> Maybe Number
+majorVersion ua = do (UserAgent agent) <- parse ua
+                     return agent.majorVersion
+
+version :: String -> Maybe Number
+version ua = do (UserAgent agent) <- parse ua
+                return agent.version
+
+vendor :: String -> Maybe String
+vendor ua = do (UserAgent agent) <- parse ua
+               return agent.vendor
 
 {- Helper -}
 
