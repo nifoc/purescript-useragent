@@ -47,6 +47,8 @@
 
     parse :: String -> Maybe UserAgent
 
+    platform :: String -> Maybe String
+
     vendor :: String -> Maybe String
 
     version :: String -> Maybe Number

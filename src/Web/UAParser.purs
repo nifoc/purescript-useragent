@@ -14,6 +14,7 @@ module Web.UAParser (
   name,
   majorVersion,
   version,
+  platform,
   vendor,
   isChrome,
   isFirefox,
@@ -153,6 +154,10 @@ majorVersion ua = do (UserAgent agent) <- parse ua
 version :: String -> Maybe Number
 version ua = do (UserAgent agent) <- parse ua
                 return agent.version
+
+platform :: String -> Maybe String
+platform ua = do (UserAgent agent) <- parse ua
+                 return agent.platform
 
 vendor :: String -> Maybe String
 vendor ua = do (UserAgent agent) <- parse ua
