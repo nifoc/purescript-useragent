@@ -102,7 +102,9 @@ isKreaTV :: String -> Boolean
 isKreaTV = regexTest "\\sKreaTV\\s"
 
 isLinux :: String -> Boolean
-isLinux ua = regexTest "Linux" ua && not (isAndroid ua)
+isLinux ua = regexTest "Linux" ua &&
+             not (isAndroid ua) &&
+             not (isKreaTV ua)
 
 isMacOSX :: String -> Boolean
 isMacOSX = regexTest "Mac\\sOS\\sX"
