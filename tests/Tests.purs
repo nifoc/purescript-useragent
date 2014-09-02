@@ -23,6 +23,32 @@ data TestCase = TestCase { userAgent :: String
 
 {- User Agents -}
 
+androidBrowser = [ TestCase { userAgent: "Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"
+                            , expectedResult: UserAgent { name: "Android Browser"
+                                                        , majorVersion: 4
+                                                        , version: 4
+                                                        , platform: "Android"
+                                                        , vendor: "Google"
+                                                        }
+                            }
+                 , TestCase { userAgent: "Mozilla/5.0 (Linux; U; Android 2.1-update1; es-mx; SonyEricssonE10a Build/2.0.A.0.504) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17"
+                            , expectedResult: UserAgent { name: "Android Browser"
+                                                        , majorVersion: 4
+                                                        , version: 4
+                                                        , platform: "Android"
+                                                        , vendor: "Google"
+                                                        }
+                            }
+                 , TestCase { userAgent: "Mozilla/5.0 (Linux; U; Android 1.6; ar-us; SonyEricssonX10i Build/R2BA026) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1"
+                            , expectedResult: UserAgent { name: "Android Browser"
+                                                        , majorVersion: 3
+                                                        , version: 3.1
+                                                        , platform: "Android"
+                                                        , vendor: "Google"
+                                                        }
+                            }
+                 ]
+
 chrome = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36"
                     , expectedResult: UserAgent { name: "Chrome"
                                                 , majorVersion: 37
@@ -270,6 +296,9 @@ runTestCases = map (\(TestCase t) -> eq t.expectedResult <<< fromMaybe failingUA
 {- Runner -}
 
 main = do
+  trace "Detects Android Browser"
+  print $ runTestCases androidBrowser
+
   trace "Detects Chrome"
   print $ runTestCases chrome
 

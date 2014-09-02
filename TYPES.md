@@ -19,6 +19,8 @@
 
     isAndroid :: String -> Boolean
 
+    isAndroidBrowser :: String -> Boolean
+
     isChrome :: String -> Boolean
 
     isEkioh :: String -> Boolean
