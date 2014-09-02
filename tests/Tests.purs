@@ -57,6 +57,16 @@ chrome = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 6.3; Win64; x64) Apple
                     }
          ]
 
+ekioh = [ TestCase { userAgent: "Mozilla/5.0 (Linux) AppleWebKit/534.51 (KHTML, like Gecko) Ekioh/2.2.4.7-moto-mob Safari/534.51:534 Motorola KreaTV STB VIP1003"
+                   , expectedResult: UserAgent { name: "Ekioh"
+                                               , majorVersion: 2
+                                               , version: 2.2
+                                               , platform: "KreaTV"
+                                               , vendor: "Ekioh"
+                                               }
+                   }
+        ]
+
 firefox = [ TestCase { userAgent: "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0"
                      , expectedResult: UserAgent { name: "Firefox"
                                                  , majorVersion: 31
@@ -262,6 +272,9 @@ runTestCases = map (\(TestCase t) -> eq t.expectedResult <<< fromMaybe failingUA
 main = do
   trace "Detects Chrome"
   print $ runTestCases chrome
+
+  trace "Detects Ekioh"
+  print $ runTestCases ekioh
 
   trace "Detects Firefox"
   print $ runTestCases firefox

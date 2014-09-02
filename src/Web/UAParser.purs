@@ -17,6 +17,7 @@ module Web.UAParser (
   platform,
   vendor,
   isChrome,
+  isEkioh,
   isFirefox,
   isMobileSafari,
   isMSIE,
@@ -25,6 +26,7 @@ module Web.UAParser (
   isSafari,
   isAndroid,
   isIOS,
+  isKreaTV,
   isLinux,
   isMacOSX,
   isWindows
@@ -65,6 +67,9 @@ mkUserAgent name version platform vendor = UserAgent { name: name
 isChrome :: String -> Boolean
 isChrome ua = regexTest "\\sChrome/\\d+" ua && not (isOpera ua)
 
+isEkioh :: String -> Boolean
+isEkioh = regexTest "\\sEkioh/\\d+"
+
 isFirefox :: String -> Boolean
 isFirefox = regexTest "\\sGecko/\\d+\\s?.+\\sFirefox/\\d+"
 
@@ -93,6 +98,9 @@ isAndroid = regexTest "Android[\\s|;]"
 isIOS :: String -> Boolean
 isIOS ua = regexTest "\\(iPhone" ua || regexTest "\\(iPad" ua || regexTest "\\(iPod" ua
 
+isKreaTV :: String -> Boolean
+isKreaTV = regexTest "\\sKreaTV\\s"
+
 isLinux :: String -> Boolean
 isLinux ua = regexTest "Linux" ua && not (isAndroid ua)
 
@@ -108,6 +116,9 @@ parse :: String -> Maybe UserAgent
 parse ua | isChrome ua       = let version = extractVersionNumber <<< regexMatch "Chrome/([\\d|\\.]+)" $ ua
                                    platform = extractPlatform ua
                                in  Just $ mkUserAgent "Chrome" version platform "Google"
+parse ua | isEkioh ua        = let version = extractVersionNumber <<< regexMatch "Ekioh/([\\d|\\.]+)" $ ua
+                                   platform = extractPlatform ua
+                               in  Just $ mkUserAgent "Ekioh" version platform "Ekioh"
 parse ua | isFirefox ua      = let version = extractVersionNumber <<< regexMatch "Firefox/([\\d|\\.]+)" $ ua
                                    platform = extractPlatform ua
                                in  Just $ mkUserAgent "Firefox" version platform "Mozilla"
@@ -177,6 +188,7 @@ extractVersionNumber matches = readFloat <<< fromMaybe "0" $ matches !! 1
 
 extractPlatform ua | isAndroid ua = "Android"
 extractPlatform ua | isIOS ua     = "iOS"
+extractPlatform ua | isKreaTV ua  = "KreaTV"
 extractPlatform ua | isLinux ua   = "Linux"
 extractPlatform ua | isMacOSX ua  = "Mac OS X"
 extractPlatform ua | isWindows ua = "Windows"

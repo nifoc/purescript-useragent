@@ -21,9 +21,13 @@
 
     isChrome :: String -> Boolean
 
+    isEkioh :: String -> Boolean
+
     isFirefox :: String -> Boolean
 
     isIOS :: String -> Boolean
+
+    isKreaTV :: String -> Boolean
 
     isLinux :: String -> Boolean
 
