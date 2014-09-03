@@ -25,6 +25,7 @@ module Web.UAParser (
   isOpera,
   isOperaMini,
   isSafari,
+  isSeaMonkey,
   isAndroid,
   isIOS,
   isKreaTV,
@@ -75,7 +76,7 @@ isEkioh :: String -> Boolean
 isEkioh = regexTest "\\sEkioh/\\d+"
 
 isFirefox :: String -> Boolean
-isFirefox = regexTest "\\sGecko/\\d+\\s?.+\\sFirefox/\\d+"
+isFirefox ua = regexTest "\\sGecko/\\d+\\s?.+\\sFirefox/\\d+" ua && not (isSeaMonkey ua)
 
 isMobileSafari :: String -> Boolean
 isMobileSafari = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+Version/[\\d|\\.]+\\sMobile/\\w+\\sSafari/[\\d|\\.]+"
@@ -94,6 +95,9 @@ isSafari ua = regexTest "AppleWebKit/[\\d|\\.]+\\+?\\s.+\\sSafari/[\\d|\\.]+" ua
               not (isChrome ua) &&
               not (isMobileSafari ua) &&
               not (isOpera ua)
+
+isSeaMonkey :: String -> Boolean
+isSeaMonkey = regexTest "\\sGecko/\\d+\\s?.+\\sSeaMonkey/\\d+"
 
 -- Platforms
 isAndroid :: String -> Boolean
@@ -161,6 +165,10 @@ parse ua | isSafari ua         = let version = if regexTest "Version/\\d+" ua
                                                                           _   -> 0
                                      platform = extractPlatform ua
                                  in  Just $ mkUserAgent "Safari" version platform "Apple"
+parse ua | isSeaMonkey ua      = let version = extractVersionNumber <<< regexMatch "SeaMonkey/([\\d|\\.]+)" $ ua
+                                     platform = extractPlatform ua
+                                     vendor =  if version <= 1.7 then "Mozilla" else "SeaMonkey Council"
+                                 in  Just $ mkUserAgent "SeaMonkey" version platform vendor
 parse _                        = Nothing
 
 name :: String -> Maybe String

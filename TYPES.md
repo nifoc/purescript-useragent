@@ -45,6 +45,8 @@
 
     isSafari :: String -> Boolean
 
+    isSeaMonkey :: String -> Boolean
+
     isWindows :: String -> Boolean
 
     majorVersion :: String -> Maybe Number

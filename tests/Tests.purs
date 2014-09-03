@@ -273,6 +273,40 @@ safari = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8)
                     }
           ]
 
+seaMonkey = [ TestCase { userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.7; rv:19.0) Gecko/20100101 Firefox/19.0 SeaMonkey/2.16.2"
+                       , expectedResult: UserAgent { name: "SeaMonkey"
+                                                   , majorVersion: 2
+                                                   , version: 2.16
+                                                   , platform: "Mac OS X"
+                                                   , vendor: "SeaMonkey Council"
+                                                   }
+                       }
+            , TestCase { userAgent: "Mozilla/5.0 (X11; Linux i686; rv:12.0) Gecko/20120502 SeaMonkey/2.9.1"
+                       , expectedResult: UserAgent { name: "SeaMonkey"
+                                                   , majorVersion: 2
+                                                   , version: 2.9
+                                                   , platform: "Linux"
+                                                   , vendor: "SeaMonkey Council"
+                                                   }
+                       }
+            , TestCase { userAgent: "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.14) Gecko/20100930 SeaMonkey/2.0.9"
+                       , expectedResult: UserAgent { name: "SeaMonkey"
+                                                   , majorVersion: 2
+                                                   , version: 2
+                                                   , platform: "Windows"
+                                                   , vendor: "SeaMonkey Council"
+                                                   }
+                       }
+            , TestCase { userAgent: "Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.13) Gecko/20080313 SeaMonkey/1.1.9"
+                       , expectedResult: UserAgent { name: "SeaMonkey"
+                                                   , majorVersion: 1
+                                                   , version: 1.1
+                                                   , platform: "Mac OS X"
+                                                   , vendor: "Mozilla"
+                                                   }
+                       }
+            ]
+
 none = [ TestCase { userAgent: "NotABrowser/11.11"
                   , expectedResult: failingUA
                   }
@@ -322,6 +356,9 @@ main = do
 
   trace "Detects Safari"
   print $ runTestCases safari
+
+  trace "Detects SeaMonkey"
+  print $ runTestCases seaMonkey
 
   trace "Ignores unknown browsers"
   print $ runTestCases none
