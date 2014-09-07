@@ -27,6 +27,8 @@
 
     isFirefox :: String -> Boolean
 
+    isFreeBSD :: String -> Boolean
+
     isIOS :: String -> Boolean
 
     isKreaTV :: String -> Boolean
@@ -38,6 +40,10 @@
     isMacOSX :: String -> Boolean
 
     isMobileSafari :: String -> Boolean
+
+    isNetBSD :: String -> Boolean
+
+    isOpenBSD :: String -> Boolean
 
     isOpera :: String -> Boolean
 

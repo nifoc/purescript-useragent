@@ -27,10 +27,13 @@ module Web.UAParser (
   isSafari,
   isSeaMonkey,
   isAndroid,
+  isFreeBSD,
   isIOS,
   isKreaTV,
   isLinux,
   isMacOSX,
+  isNetBSD,
+  isOpenBSD,
   isWindows
   ) where
 
@@ -103,6 +106,9 @@ isSeaMonkey = regexTest "\\sGecko/\\d+\\s?.+\\sSeaMonkey/\\d+"
 isAndroid :: String -> Boolean
 isAndroid = regexTest "Android[\\s|;]"
 
+isFreeBSD :: String -> Boolean
+isFreeBSD = regexTest "\\sFreeBSD\\s"
+
 isIOS :: String -> Boolean
 isIOS ua = regexTest "\\(iPhone" ua || regexTest "\\(iPad" ua || regexTest "\\(iPod" ua
 
@@ -116,6 +122,12 @@ isLinux ua = regexTest "Linux" ua &&
 
 isMacOSX :: String -> Boolean
 isMacOSX = regexTest "Mac\\sOS\\sX"
+
+isNetBSD :: String -> Boolean
+isNetBSD = regexTest "\\sNetBSD\\s"
+
+isOpenBSD :: String -> Boolean
+isOpenBSD = regexTest "\\sOpenBSD\\s"
 
 isWindows :: String -> Boolean
 isWindows = regexTest "Windows"
@@ -204,9 +216,12 @@ regexMatch' expr flags = RE.match $ RE.regex expr (RE.parseFlags flags)
 extractVersionNumber matches = readFloat <<< fromMaybe "0" $ matches !! 1
 
 extractPlatform ua | isAndroid ua = "Android"
+extractPlatform ua | isFreeBSD ua = "FreeBSD"
 extractPlatform ua | isIOS ua     = "iOS"
 extractPlatform ua | isKreaTV ua  = "KreaTV"
 extractPlatform ua | isLinux ua   = "Linux"
 extractPlatform ua | isMacOSX ua  = "Mac OS X"
+extractPlatform ua | isNetBSD ua  = "NetBSD"
+extractPlatform ua | isOpenBSD ua = "OpenBSD"
 extractPlatform ua | isWindows ua = "Windows"
 extractPlatform _                 = "Unknown"
