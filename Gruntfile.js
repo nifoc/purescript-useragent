@@ -19,8 +19,8 @@ module.exports = function(grunt) {
     psc: {
       tests: {
         options: {
-          module: ["Main"],
-          main: true
+          module: ["Tests"],
+          main: "Tests"
         },
         src: [
           "tests/Tests.purs",
